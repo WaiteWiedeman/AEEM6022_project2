@@ -34,11 +34,15 @@ k(end) = [];
 tStart = tic;
 distances(distances==0) = inf;
 N_cities = size(locations,1);
+for i = 1:length(k)
+    distances(k(i),:) = inf;
+end
 shortestPathLength = inf;
 
 for i = 1:length(k)
-i = 1;
+%i = 10;
     startCity = k(i);
+    %path = startCity;
 
     distanceTraveled = 0;
     distancesNew = distances;
@@ -56,6 +60,14 @@ i = 1;
             else
                 k = [k(i); nextCity; k(i+1:end)];
             end
+        elseif i == length(k)
+            dist1 = distancesNew(nextCity,k(end-1));
+            dist2 = distancesNew(nextCity,k(1));
+            if dist1 < dist2
+                k = [k(1:end-1); nextCity; k(end)];
+            else
+                k = [nextCity; k];
+            end
         else
             dist1 = distancesNew(nextCity,k(i-1));
             dist2 = distancesNew(nextCity,k(i+1));
@@ -70,7 +82,7 @@ i = 1;
             nextCity = nextCity(1);
         end
 
-        k(end+1) = nextCity;
+        %k(end+1) = nextCity;
         distanceTraveled = distanceTraveled +...
                     distances(currentCity,nextCity);
 
@@ -84,10 +96,10 @@ i = 1;
     distanceTraveled = distanceTraveled +...
         distances(currentCity,startCity);
 
-    % if (distanceTraveled < shortestPathLength)
-    %     shortestPathLength = distanceTraveled;
-    %     shortestPath = path; 
-    % end 
+    if (distanceTraveled < shortestPathLength)
+        shortestPathLength = distanceTraveled;
+        shortestPath = path; 
+    end 
 
 end
 tEnd = toc(tStart);
