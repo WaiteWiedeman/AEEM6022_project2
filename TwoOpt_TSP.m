@@ -4,12 +4,15 @@
 % @@@@ PREPARED BY ANOOP SATHYAN @@@@
 % @@@@ @@@@
 % @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-clc; clear; close all;
-n = 100; %Set the number of cities
-xy = 10*rand(n,2); %Randomise the positions of cities
+function distance = TwoOpt_TSP(locations,distances)
+%n = 100; %Set the number of cities
+n = length(locations);
+%xy = 10*rand(n,2); %Randomise the positions of cities
+xy = locations;
 num_iter = 100; % Number of iterations
 a = meshgrid(1:n);
-dmat = reshape(sqrt(sum((xy(a,:)-xy(a',:)).^2,2)),n,n); %Distance Matrix
+%dmat = reshape(sqrt(sum((xy(a,:)-xy(a',:)).^2,2)),n,n); %Distance Matrix
+dmat = distances;
 opt_rte = [1:1:n];
 newopt = opt_rte; %Initial Tour
 newopt(n+1) = opt_rte(1); %Should return to the starting position.

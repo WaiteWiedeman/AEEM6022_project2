@@ -53,26 +53,26 @@ function varargout = tsp_ga(xy,dmat,pop_size,num_iter,show_prog,show_res)
 % Release: 2.2
 % Release Date: 6/2/09
 % Process Inputs and Initialize Defaults
-nargs = 6;
-for k = nargin:nargs-1
-    switch k
-        case 0
-            xy = 10*rand(50,2);
-        case 1
-            N = size(xy,1);
-            a = meshgrid(1:N);
-            dmat = reshape(sqrt(sum((xy(a,:)-xy(a',:)).^2,2)),N,N);
-        case 2
-            pop_size = 100;
-        case 3
-            num_iter = 1e4;
-        case 4
-            show_prog = 1;
-        case 5
-            show_res = 1;
-        otherwise
-    end
-end
+% nargs = 6;
+% for k = nargin:nargs-1
+%     switch k
+%         case 0
+%             xy = 10*rand(50,2);
+%         case 1
+%             N = size(xy,1);
+%             a = meshgrid(1:N);
+%             dmat = reshape(sqrt(sum((xy(a,:)-xy(a',:)).^2,2)),N,N);
+%         case 2
+%             pop_size = 100;
+%         case 3
+%             num_iter = 1e4;
+%         case 4
+%             show_prog = 1;
+%         case 5
+%             show_res = 1;
+%         otherwise
+%     end
+% end
 % Verify Inputs
 [N,dims] = size(xy);
 [nr,nc] = size(dmat);
@@ -173,4 +173,5 @@ end
 if nargout
     varargout{1} = opt_rte;
     varargout{2} = min_dist;
+end
 end

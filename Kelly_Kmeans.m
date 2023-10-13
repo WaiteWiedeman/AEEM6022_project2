@@ -1,0 +1,93 @@
+% ###################################################################
+% ####                                                            ###
+% ####       AEEM 6022: Fall 2013 - Kmeans                        ###
+% ####                   Kelly_Kmeans.m                           ###
+% ####                                                            ###
+% ###################################################################
+
+clc; clf; clear;
+
+% normalized x and y coordinates of cities
+x_cities = [0.1905, 0.4177, 1.1147, 0.1457, 1.0422, 0.6581, 0.2803, 0.6684, 0.414,...
+    0.1785, 0.8779,1.1269, 0.7589, 1.2214, 0.9241, 0.5275, 0.8779, 0.5707,...
+    0.7962, 0.8532, 0.2433, 0.4668, 0.2485,0.3945, 0.6758, 0.3435, 0.2286,...
+    0.1173, 0.16, 0.1267, 0.3898, 1.3039, 1.2795, 0.5264, 0.7363,1.1704,...
+    0.3625, 0.3522,0.9716, 0.8205, 0.5527, 0.7302, 0.6702, 0.7628, 0.9665,...
+    1.2174, 0.9337, 0.3116, 0.7064, 1.2665];
+y_cities = [0.9134, 0.5469,0.3922,0.8235,0.3171,0.3816,0.4898,0.6463,0.6797,...
+    0.4984,0.2238,0.2551,0.6991,0.2435,0.4733,0.8308,0.5497,0.5678,...
+    0.7792,0.4694,0.7943,0.5285,0.602,0.6541,0.0838,0.9133,0.8258,...
+    0.4427,0.9619,0.3998,0.8001,0.5797,0.6221,0.5132,0.4893,0.3897,...
+    0.4039,0.3532,0.4509,0.2963,0.6256,0.4359,0.3063,0.5108,0.3786,...
+    0.5328,0.587,0.3012,0.2305,0.1948];
+locations = [x_cities.' y_cities.'];
+%  rand Uniformly distributed pseudorandom numbers.
+%  R = rand(N) returns an N-by-N matrix containing pseudorandom values drawn
+%  from the standard uniform distribution on the open interval(0,1).  
+%  rand(M,N) or rand([M,N]) returns an M-by-N matrix.
+figure(1)
+load('usborder.mat','x','y','xx','yy');
+plot(x,y,'Color','red'); hold on;
+plot(locations(:,1),locations(:,2),'*')
+title('Geographically distributed cities normalized on interval(0,1)')
+xlabel('x coordinate of the cities')
+ylabel('y coordinate of the cities')
+
+%[IDX, C, SUMD, D] = kmeans(X, K);
+% IDX = kmeans(X, K) partitions the points in the N-by-P data matrix X
+%     into K clusters.  This partition minimizes the sum, over all clusters, of
+%     the within-cluster sums of point-to-cluster-centroid distances.  Rows of X
+%     correspond to points, columns correspond to variables.  Note: when X is a
+%     vector, kmeans treats it as an N-by-1 data matrix, regardless of its
+%     orientation.  kmeans returns an N-by-1 vector IDX containing the cluster
+%     indices of each point.  
+%      'Distance' - Distance measure, in P-dimensional space, that kmeans
+%        should minimize with respect to.  Choices are:
+%            'sqEuclidean'  - Squared Euclidean distance (the default)
+%     kmeans treats NaNs as missing data, and ignores any rows of X that
+%     contain NaNs.
+%  
+%     [IDX, C] = kmeans(X, K) returns the K cluster centroid locations in
+%     the K-by-P matrix C.
+%  
+%     [IDX, C, SUMD] = kmeans(X, K) returns the within-cluster sums of
+%     point-to-centroid distances in the 1-by-K vector sumD.
+%  
+%     [IDX, C, SUMD, D] = kmeans(X, K) returns distances from each point
+%     to every centroid in the N-by-K matrix D.
+
+K=4; % Number of clusters
+[idx,ctrs, SUMD, D] = kmeans(locations,K); 
+
+for z = 1:K
+    for count1=1:length(locations(idx == K))
+        for count2=1:count1
+            x1(K) = locations(count1,1);
+            y1(K) = locations(count1,2);
+            x2(K) = locations(count2,1);
+            y2(K) = locations(count2,2);
+            distances(count1,count2,K)=sqrt((x1(K)-x2(K))^2+(y1(K)-y2(K))^2);
+            distances(count2,count1,K)=distances(count1,count2,K);
+        end
+    end
+end
+
+% figure(2)
+% load('usborder.mat','x','y','xx','yy');
+% plot(x,y,'Color','red'); hold on;
+% plot(locations(idx==1,1),locations(idx==1,2),'r.','MarkerSize',14)
+% hold on
+% plot(locations(idx==2,1),locations(idx==2,2),'b.','MarkerSize',14)
+% hold on
+% plot(locations(idx==3,1),locations(idx==3,2),'g.','MarkerSize',14)
+% hold on
+% plot(locations(idx==4,1),locations(idx==4,2),'m.','MarkerSize',14)
+% hold on
+% plot(ctrs(:,1),ctrs(:,2),'kx',...
+%      'MarkerSize',12,'LineWidth',2)
+% plot(ctrs(:,1),ctrs(:,2),'ko',...
+%      'MarkerSize',12,'LineWidth',2)
+% legend('Cluster 1','Cluster 2','Cluster 3','Cluster 4','Centroids','Location','Best')
+% title('Geographically distributed targets normalized on interval(0,1)')
+% xlabel('x coordinate of the target')
+% ylabel('y coordinate of the target')

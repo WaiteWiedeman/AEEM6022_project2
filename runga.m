@@ -1,0 +1,26 @@
+function fval = runga(locations, distances)
+tStart = tic;
+
+%distancesdefinedearlier
+FitnessFcn=@(x)traveling_salesman_fitness(x,distances);
+
+%locationsdefinedearlier
+my_plot=@(options,state,flag)traveling_salesman_plot(options,...
+state,flag,locations);
+
+options=gaoptimset('PopulationType','custom','PopInitRange',...
+[1; length(locations)+1]);
+
+options=gaoptimset(options,'CreationFcn',@create_permutations,...
+'CrossoverFcn',@crossover_permutation,...
+'MutationFcn',@mutate_permutation,...
+'PlotFcn',my_plot,...
+'Generations',1000,'PopulationSize',60,...
+'StallGenLimit',200,'Vectorized','on');
+
+numberOfVariables=length(locations);
+[x,fval,reason,output]=...
+ga(FitnessFcn,numberOfVariables,[],[],[],[],[],[],[],options)
+tEnd = toc(tStart);
+
+title(['Path length = ',num2str(fval),'   Convergence time = ',num2str(tEnd)]);
